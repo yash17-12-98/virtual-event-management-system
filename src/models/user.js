@@ -22,7 +22,7 @@ const userSchema = Schema({
   },
   role: {
     type: String,
-    enum: ["Event organizers", "Attendees"],
+    enum: ["Event organizer", "Attendee"],
     required: [true, "Role not provided"],
   },
   password: {

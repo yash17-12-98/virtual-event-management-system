@@ -72,7 +72,9 @@ const register = async (req, res) => {
       data: { id: saveUser.id, name: saveUser.name, role: saveUser.role },
     });
   } catch (err) {
-    return res.status(500).send(err || "Internel server error");
+    return res
+      .status(500)
+      .json({ status: "error", message: err || "Internel server error" });
   }
 };
 

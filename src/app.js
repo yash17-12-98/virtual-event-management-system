@@ -1,5 +1,6 @@
 const express = require("express");
 const authRoute = require("./routes/auth");
+const eventRoute = require("./routes/event");
 const { mongoDbConnect } = require("./connection");
 const app = express();
 
@@ -17,10 +18,11 @@ try {
 }
 
 app.get("", (req, res) => {
-  return res.status(200).send(`Hello, server calling from ${port}`);
+  return res.status(200).send(`Hello server calling on ${port}`);
 });
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/events", eventRoute);
 
 app.listen(port, () => {
   console.log(`Server running on: http://localhost:${port}`);
