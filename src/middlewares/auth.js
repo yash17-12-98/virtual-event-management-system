@@ -13,7 +13,7 @@ const verifyToken = (req, res, next) => {
     return jwt.verify(
       extractToken(req),
       process.env.API_SECRET,
-      (err, decode) => checkUserIsAuthorised(req, res, next, err, decode)
+      (err, decode) => checkUserIsAuthenticated(req, res, next, err, decode)
     );
   }
   return res
@@ -21,7 +21,7 @@ const verifyToken = (req, res, next) => {
     .json({ status: "error", message: "Token verification failed" });
 };
 
-const checkUserIsAuthorised = (req, res, next, err, decode) => {
+const checkUserIsAuthenticated = (req, res, next, err, decode) => {
   if (err) {
     return res
       .status(401)
