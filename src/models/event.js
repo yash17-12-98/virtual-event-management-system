@@ -15,7 +15,7 @@ const eventSchema = Schema({
     type: Date,
     required: [true, "Event date not provided"],
   },
-  participants: [{ type: Schema.Types.ObjectId, ref: "Participants" }],
+  participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
   created: {
     type: Date,
     default: Date.now,

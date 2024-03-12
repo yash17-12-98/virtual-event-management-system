@@ -1,13 +1,12 @@
 const Event = require("../models/event");
 const Validator = require("../helpers/validators");
-const Participant = require("../models/participant");
 
 const getEvents = async (req, res) => {
   const allEvents = await Event.find({});
 
   return res
     .status(200)
-    .json({ status: "success", count: allEvents.length, message: allEvents });
+    .json({ status: "success", count: allEvents.length, data: allEvents });
 };
 
 const updateEvents = async (req, res) => {
@@ -99,34 +98,53 @@ const deleteEvents = async (req, res) => {
     });
   }
 };
+
 const registerEventByUser = async (req, res) => {
-  console.log("register");
-  const eventId = req.params.id;
-  console.log("eventId ", eventId);
-  const userRequest = req.body;
-  const event = await Event.findById({ _id: eventId });
+  try {
+    const eventId = req.params.id;
 
-  console.log("Event =>", event);
+    const userId = req.user.id;
 
-  if (!event) {
-    return res.status(400).json({
-      status: "error",
-      message: "Event not found",
+    const event = await Event.findById({ _id: eventId });
+
+    console.log("Event", event);
+
+    if (!event) {
+      return res.status(400).json({
+        status: "error",
+        message: "Event not found",
+      });
+    }
+
+    if (event.participants.includes(userId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Participant is already registered",
+      });
+    }
+
+    event.participants.push(userId);
+
+    await event.save();
+
+    const participants = await Event.findById({ _id: eventId }).populate({
+      path: "participants",
+      select: "name",
     });
+
+    console.log("All Participants", participants);
+
+    return res.status(200).json({
+      status: "success",
+      message: "User registered in event successfully",
+      event: participants,
+    });
+  } catch (err) {
+    console.log("error", err);
+    return res
+      .status(500)
+      .json({ status: "error", message: err || "Internal server error" });
   }
-
-  event.participants.push(
-    Participant({ name: userRequest.name, email: userRequest.email })
-  );
-
-  const result = await event.save();
-
-  console.log("Result", result);
-
-  return res.status(200).json({
-    status: "success",
-    message: "User registered in event successfully",
-  });
 };
 
 module.exports = {

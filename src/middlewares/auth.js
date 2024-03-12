@@ -10,37 +10,38 @@ function extractToken(req) {
 
 const verifyToken = (req, res, next) => {
   if (req.headers && req.headers.authorization) {
-    jwt.verify(
+    return jwt.verify(
       extractToken(req),
       process.env.API_SECRET,
-      function (err, decode) {
-        if (err) {
-          return res
-            .status(401)
-            .json({ status: "error", message: "Token verification failed" });
-        }
-        console.log("Decoded Id ", decode.id);
-
-        User.findOne({ _id: decode.id })
-          .then((user) => {
-            console.log("Get User after verification", user);
-            req.user = user;
-            req.message = "User find successfully";
-            return next();
-          })
-          .catch((err) => {
-            console.log("Error", err);
-            return res
-              .status(401)
-              .json({ status: "error", message: "Token verification failed" });
-          });
-      }
+      (err, decode) => checkUserIsAuthorised(req, res, next, err, decode)
     );
-  } else {
+  }
+  return res
+    .status(401)
+    .json({ status: "error", message: "Token verification failed" });
+};
+
+const checkUserIsAuthorised = (req, res, next, err, decode) => {
+  if (err) {
     return res
       .status(401)
       .json({ status: "error", message: "Token verification failed" });
   }
+  console.log("Decoded Id ", decode.id);
+
+  User.findOne({ _id: decode.id })
+    .then((user) => {
+      console.log("Verified User", user);
+      req.user = user;
+      req.message = "User find successfully";
+      return next();
+    })
+    .catch((err) => {
+      console.log("Error", err);
+      return res
+        .status(401)
+        .json({ status: "error", message: "Token verification failed" });
+    });
 };
 
 const checkAuthoriseUserAccess = (req, res, next) => {
