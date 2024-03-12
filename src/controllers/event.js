@@ -1,7 +1,7 @@
 const Event = require("../models/event");
 const Validator = require("../helpers/validators");
 
-const getEvents = async (req, res) => {
+module.exports.get = async (req, res) => {
   const allEvents = await Event.find({});
 
   return res
@@ -9,7 +9,7 @@ const getEvents = async (req, res) => {
     .json({ status: "success", count: allEvents.length, data: allEvents });
 };
 
-const updateEvents = async (req, res) => {
+module.exports.update = async (req, res) => {
   try {
     const eventId = req.params.id;
     const updateEventRequest = req.body;
@@ -49,7 +49,7 @@ const updateEvents = async (req, res) => {
   }
 };
 
-const createEvents = async (req, res) => {
+module.exports.create = async (req, res) => {
   try {
     const eventRequest = req.body;
 
@@ -81,7 +81,7 @@ const createEvents = async (req, res) => {
   }
 };
 
-const deleteEvents = async (req, res) => {
+module.exports.remove = async (req, res) => {
   try {
     const eventId = req.params.id;
 
@@ -99,7 +99,7 @@ const deleteEvents = async (req, res) => {
   }
 };
 
-const registerEventByUser = async (req, res) => {
+module.exports.registerUser = async (req, res) => {
   try {
     const eventId = req.params.id;
 
@@ -145,12 +145,4 @@ const registerEventByUser = async (req, res) => {
       .status(500)
       .json({ status: "error", message: err || "Internal server error" });
   }
-};
-
-module.exports = {
-  getEvents,
-  updateEvents,
-  createEvents,
-  deleteEvents,
-  registerEventByUser,
 };

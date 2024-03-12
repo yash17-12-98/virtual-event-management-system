@@ -1,27 +1,22 @@
 const express = require("express");
-const event = express.Router();
+const eventRoute = express.Router();
+const event = require("../controllers/event");
 
 const {
   verifyToken,
   checkAuthoriseUserAccess,
 } = require("../middlewares/auth");
 
-const {
-  getEvents,
-  updateEvents,
-  deleteEvents,
-  createEvents,
-  registerEventByUser,
-} = require("../controllers/event");
+const event = require("../controllers/event");
 
-event.get("/", verifyToken, checkAuthoriseUserAccess, getEvents);
+eventRoute.get("/", verifyToken, checkAuthoriseUserAccess, event.get);
 
-event.post("/", verifyToken, checkAuthoriseUserAccess, createEvents);
+eventRoute.post("/", verifyToken, checkAuthoriseUserAccess, event.create);
 
-event.put("/:id", verifyToken, checkAuthoriseUserAccess, updateEvents);
+eventRoute.put("/:id", verifyToken, checkAuthoriseUserAccess, event.update);
 
-event.delete("/:id", verifyToken, checkAuthoriseUserAccess, deleteEvents);
+eventRoute.delete("/:id", verifyToken, checkAuthoriseUserAccess, event.remove);
 
-event.post("/:id/register", verifyToken, registerEventByUser);
+eventRoute.post("/:id/register", verifyToken, event.registerUser);
 
 module.exports = event;

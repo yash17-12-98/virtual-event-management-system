@@ -60,7 +60,7 @@ const register = async (req, res) => {
     const newUser = new User({
       name: userRequest.name,
       email: userRequest.email,
-      password: bcrypt.hashSync(userRequest.password, 8),
+      password: bcrypt.hashSync(userRequest.password, process.env.HASH_ROUND),
       role: userRequest.role,
     });
 
