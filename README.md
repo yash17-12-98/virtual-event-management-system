@@ -10,12 +10,12 @@ User Management:
 
 - JWT-based session management for user authentication.
 
-  Event Management:
+Event Management:
 
 - Create, update, and delete event details, including date, time, description, and participant list.
 - Accessible only to authenticated and authorized users.
 
-  Participant Management:
+Participant Management:
 
 - Users can register for events.
 - View and manage their event registrations.
