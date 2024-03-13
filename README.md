@@ -7,7 +7,6 @@ Welcome to the Virtual Event Management Platform! This project focuses on develo
 User Management:
 
 - Secure user registration based on roles.
-
 - JWT-based session management for user authentication.
 
 Event Management:
