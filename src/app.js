@@ -10,7 +10,7 @@ require("dotenv").config();
 const port = process.env.PORT;
 
 try {
-  mongoDbConnect("mongodb://localhost:27017/event-managment-system")
+  mongoDbConnect(process.env.MONGODB_URL)
     .then(() => console.log("Mongo Db Connected"))
     .catch((err) => console.log(err));
 } catch (e) {
